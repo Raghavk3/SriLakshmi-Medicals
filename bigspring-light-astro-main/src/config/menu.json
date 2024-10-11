@@ -1,0 +1,25 @@
+{
+  "main": [
+    {
+      "name": "Home",
+      "url": "#banner"
+    },
+    {
+      "name": "New Medicines",
+      "url": "#new-medicines"
+    },
+    {
+      "name": "Popular Products",
+      "url": "#popular-products"
+    },
+    {
+      "name": "Offers",
+      "url": "#popular-products"
+    },
+    {
+      "name": "Our stats",
+      "url": "#our"
+    }
+  ],
+  "footer": []
+}

@@ -1,0 +1,200 @@
+---
+import { Image } from "astro:assets";
+import Base from "@/layouts/Base.astro";
+import Cta from "@/layouts/components/Cta.astro";
+import { markdownify } from "@/lib/utils/textConverter";
+import { getEntryBySlug } from "astro:content";
+
+const homepage = await getEntryBySlug("homepage", "index");
+const { banner, newProducts, popularProducts, workflow, call_to_action } = homepage.data;
+---
+
+<Base>
+  <head>
+    <link rel="stylesheet" href="/src/styles/main.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  </head>
+  <!-- banner -->
+  <section id="banner" class="section pb-[50px]" style="background-color: #0AA8A7;">
+    <div class="container">
+      <div class="row flex items-center justify-between"> <!-- Flex container -->
+        <div class="lg:col-6 text-left"> <!-- Left-aligned content -->
+          <h1 class="font-primary font-bold" style="color: white; font-size: 4rem;">{banner?.title}</h1>
+          {banner?.content && (
+           <p class="mt-4" style="color: white;" set:html={markdownify(banner.content)} />
+          )}
+          {banner?.button?.enable && (
+           <a class="btn btn-white mt-4" href={banner.button.link} style="background-color: white; color: #0AA8A7;">
+  {banner.button.label}
+</a>
+          )}
+        </div>
+  
+        {banner?.image && (
+          <div class="lg:col-6">
+            <Image
+              class="mx-auto mt-12"
+              src={banner?.image}
+              width={750}
+              height={390}
+              alt="banner image"
+            />
+          </div>
+        )}
+      </div>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section id="new-medicines" class="section bg-theme-light">
+    <div class="container">
+      <div class="text-center">
+        <h2>{markdownify(newProducts!.title)}</h2>
+      </div>
+      <div class="mt-8 grid gap-x-8 gap-y-6 sm:grid-cols-2 lg:grid-cols-4">
+        {
+          newProducts!.products.map((item: any, i: number) => (
+            <div class="product-card rounded-xl bg-white p-5 pb-8 text-center shadow-md">
+              {item.image && (
+                <img
+                  class="mx-auto mb-4"
+                  src={item.image}
+                  alt={item.name}
+                  width={150}
+                  height={150}
+                />
+              )}
+              <div>
+                <p class="text-lg font-bold">{item.name}</p>
+                <p class="mt-2 text-gray-500">{item.price}</p>
+              </div>
+              <div class="mt-4">
+                <a href="http://wa.me/918185081045" target="_blank">
+                <button class="bg-[#0AA8A7] text-white py-2 px-4 rounded hover:bg-[#089796]">
+  Check Availability
+</button>
+</a>
+              </div>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>  
+
+  <!-- Services -->
+  <!-- Popular Products Section -->
+<section id="popular-products" class="section bg-theme-light">
+  <div class="container">
+    <!-- First Row: 4 Product Cards -->
+    <div class="text-center">
+      <h2>{markdownify(popularProducts!.firstRow!.title)}</h2>
+    </div>
+    <div class="mt-8 grid gap-x-8 gap-y-6 sm:grid-cols-2 lg:grid-cols-4">
+      {
+        popularProducts!.firstRow!.products.map((item: any, i: number) => (
+          <div class="product-card rounded-xl bg-white p-5 pb-8 text-center shadow-md">
+            {item.image && (
+              <img
+                class="mx-auto mb-4"
+                src={item.image}
+                alt={item.name}
+                width={150}
+                height={150}
+              />
+            )}
+            <div>
+              <p class="text-lg font-bold">{item.name}</p>
+              <p class="mt-2 text-gray-500">{item.price}</p>
+            </div>
+            <div class="mt-4">
+              <a href="http://wa.me/918185081045" target="_blank">
+              <button class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">
+                Check Availability
+              </button>
+            </a>
+            </div>
+          </div>
+        ))
+      }
+    </div>
+    
+    <!-- Special Offers: 2 Rows of 2 Boxes Each (4 in total) -->
+
+<div class="mt-12 grid gap-y-8 lg:grid-cols-2 lg:gap-x-8">
+  {
+    popularProducts!.specialOffers.map((offer: any, index: number) => (
+      <div 
+        class={`special-offer-card flex items-center rounded-2xl p-6 shadow-lg mb-8`}
+        style={index === 0 || index === 3 ? 'background-color: #fdf7e7;' : 'background-color: #f0fef0;'}
+      >
+        <!-- Text Section -->
+        <div class="text-left flex-1">
+          <p class="text-xl font-bold text-red-500">{offer.discount}</p>
+          <p class="mt-2 text-lg font-bold">{offer.name}</p>
+          <p class="mt-2 line-through text-gray-400">{offer.oldPrice}</p>
+          <p class="mt-1 text-xl font-bold text-green-600">{offer.newPrice}</p>
+          <p class="mt-2 text-sm text-gray-600">{offer.description}</p>
+        </div>
+
+        <!-- Image Section -->
+        <div class="ml-4">
+          <img
+            class="w-full max-w-[230px] rounded-lg"
+            src={offer.image}
+            alt={offer.name}
+            width={150}
+            height={150}
+          />
+        </div>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+
+  <!-- ./End service -->
+
+ <!-- Workflow -->
+<section id="our" class="section pb-0">
+  <div class="mb-8 text-center">
+    <h2 class="mx-auto max-w-[400px] font-bold leading-[44px]" set:html={workflow?.title} />
+  </div>
+
+  <!-- Cards Container -->
+  <div class="container">
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+      
+      <!-- Card 1 -->
+      <div style="background-color: #bfe4c7; padding: 70px; border-radius: 10px; display: flex; align-items: center;">
+        <i class="fa-solid fa-truck-fast" style="font-size: 24px; margin: 15px;"></i> <!-- Favicon for person -->
+        <p style="margin-left: 10px; font-size: 18px; font-weight: bold;">14k+ Orders Completed</p>
+      </div>
+
+      <!-- Card 2 -->
+      <div style="background-color: #f9edc8; padding: 70px; border-radius: 10px; display: flex; align-items: center;">
+        <i class="fas fa-award" style="font-size: 24px; margin: 15px;"></i> <!-- Favicon for medal/award -->
+        <p style="margin-left: 10px; font-size: 18px; font-weight: bold;">250+ Awards Won</p>
+      </div>
+
+      <!-- Card 3 -->
+      <div style="background-color: #c5ee99; padding: 70px; border-radius: 10px; display: flex; align-items: center;">
+        <i class="fas fa-users" style="font-size: 24px; margin: 15px;"></i> <!-- Favicon for people -->
+        <p style="margin-left: 10px; font-size: 18px; font-weight: bold;">8k+ Happy Customers</p>
+      </div>
+
+      <!-- Card 4 -->
+      <div style="background-color: #f7ecfd; padding: 70px; border-radius: 10px; display: flex; align-items: center;">
+        <i class="fas fa-smile" style="font-size: 24px; margin: 15px;"></i> <!-- Favicon for positive review -->
+        <p style="margin-left: 10px; font-size: 18px; font-weight: bold;">12k+ Positive Reviews</p>
+      </div>
+      
+    </div>
+  </div>
+</section>
+
+  <!-- Call to Action -->
+  <Cta cta={call_to_action} />
+</Base>
